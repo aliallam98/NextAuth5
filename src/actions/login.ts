@@ -1,15 +1,20 @@
 "use server";
 
-import { LoginSchema } from "@/schemas";
 import * as z from "zod";
+import bcrypt from "bcrypt";
+
+
+import { LoginSchema } from "@/schemas";
 
 export const login = async (values: z.infer<typeof LoginSchema>) => {
   try {
     const validationFields = LoginSchema.safeParse(values);
 
     if (!validationFields.success) {
-      throw new Error("something is wrong");
+      throw new Error("Validation Error");
     }
+
+    const {email,password} = validationFields.data
 
     return {
       success: true,
